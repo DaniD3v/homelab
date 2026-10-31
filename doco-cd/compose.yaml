@@ -4,11 +4,18 @@ services:
     restart: unless-stopped
     environment:
       SELF_UPDATE_ENABLED: "true"
+      SOPS_AGE_KEY_FILE: /run/secrets/sops_age_key
       POLL_CONFIG: "- url: https://github.com/DaniD3v/homelab.git"
 
+    secrets:
+      - sops_age_key
     volumes:
       - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock
       - data:/data
 
 volumes:
   data:
+
+secrets:
+  sops_age_key:
+    file: /etc/doco-cd/age.key
