@@ -1,2 +1,4 @@
 creation_rules:
-  - age: age1xey4gaucd8qfqxnlaszcts7qusu59wutcy67m6eqz0x3wvnc7cjq3yyzlp
+  - age:
+      - age1xey4gaucd8qfqxnlaszcts7qusu59wutcy67m6eqz0x3wvnc7cjq3yyzlp # thinkpad-e14
+      - age1qtzgfkz9mh8tmc2kvxn6z4htu3fqh60mqay2n2mtt936uh4r6vrqex652q # main
