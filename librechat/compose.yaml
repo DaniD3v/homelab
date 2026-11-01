@@ -4,7 +4,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - 127.0.0.1:3080:3080
+      - 3080:3080
     environment:
       HOST: 0.0.0.0
       MONGO_URI: mongodb://mongodb:27017/LibreChat
