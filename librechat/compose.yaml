@@ -1,6 +1,7 @@
 services:
   api:
     image: registry.librechat.ai/librechat-ai/librechat:v0.8.8@sha256:5b706bcee1ca154a1e2987303aaeca0eb27f97919cccee4bb604226c2f8abf61
+    restart: unless-stopped
     depends_on:
       - mongodb
     ports:
@@ -21,6 +22,7 @@ services:
 
   mongodb:
     image: docker.io/library/mongo:8.0.34@sha256:b9924c330a8bbc5800fe9c69f04a84e221eca7b28fd049a0354147d9908fa142
+    restart: unless-stopped
     volumes:
       - mongodb:/data/db
 
