@@ -5,3 +5,6 @@ name: librechat
 working_dir: librechat
 env_files:
   - secrets.sops.env
+---
+name: caddy
+working_dir: caddy

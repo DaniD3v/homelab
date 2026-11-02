@@ -1,0 +1,13 @@
+auth.danidev.vip {
+	reverse_proxy pocket-id:1411
+}
+
+netbird.danidev.vip {
+	@grpc header Content-Type application/grpc*
+	reverse_proxy @grpc h2c://netbird-server:80
+
+	@backend path /relay* /ws-proxy/* /api/* /oauth2/*
+	reverse_proxy @backend netbird-server:80
+
+	reverse_proxy netbird-dashboard:80
+}
