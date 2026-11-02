@@ -8,3 +8,8 @@ env_files:
 ---
 name: caddy
 working_dir: caddy
+---
+name: pocket-id
+working_dir: pocket-id
+env_files:
+  - secrets.sops.env
