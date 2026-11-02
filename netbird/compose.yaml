@@ -1,0 +1,37 @@
+services:
+  netbird-server:
+    image: docker.io/netbirdio/netbird-server:0.82.0@sha256:7b5b53b2dc8bc25639f791cf72d47cf86911894ff3f8a97cb79bab9be958109c
+    restart: unless-stopped
+
+    ports:
+      - 3478:3478/udp
+    volumes:
+      - ./config.yaml:/etc/netbird/config.yaml:ro
+      - data:/var/lib/netbird
+    networks:
+      - proxy
+
+  netbird-dashboard:
+    image: docker.io/netbirdio/dashboard:v2.96.0@sha256:340b13c00b84349572a2acc5605e907cb09250a9e6461c757097eabdb8e02f2c
+    restart: unless-stopped
+
+    environment:
+      NETBIRD_MGMT_API_ENDPOINT: https://netbird.danidev.vip
+      NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.danidev.vip
+      AUTH_AUTHORITY: https://netbird.danidev.vip/oauth2
+      AUTH_CLIENT_ID: netbird-dashboard
+      AUTH_AUDIENCE: netbird-dashboard
+      AUTH_SUPPORTED_SCOPES: openid profile email groups
+      AUTH_REDIRECT_URI: /nb-auth
+      AUTH_SILENT_REDIRECT_URI: /nb-silent-auth
+      USE_AUTH0: "false"
+
+    networks:
+      - proxy
+
+volumes:
+  data:
+
+networks:
+  proxy:
+    external: true

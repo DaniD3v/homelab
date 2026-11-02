@@ -13,3 +13,6 @@ name: pocket-id
 working_dir: pocket-id
 env_files:
   - secrets.sops.env
+---
+name: netbird
+working_dir: netbird
