@@ -1,0 +1,25 @@
+{
+    "Stuns": [{ "Proto": "udp", "URI": "stun:netbird.danidev.vip:3478" }],
+    "Relay": {
+        "Addresses": ["rels://netbird.danidev.vip:443"],
+        "CredentialsTTL": "24h",
+        "Secret": "{{ .RELAY_AUTH_SECRET }}"
+    },
+    "Signal": { "Proto": "https", "URI": "netbird.danidev.vip:443" },
+    "DataStoreEncryptionKey": "{{ .DATASTORE_ENCRYPTION_KEY }}",
+    "HttpConfig": {
+        "AuthIssuer": "https://auth.danidev.vip",
+        "AuthAudience": "netbird",
+        "AuthUserIDClaim": "sub",
+        "OIDCConfigEndpoint": "https://auth.danidev.vip/.well-known/openid-configuration"
+    },
+    "PKCEAuthorizationFlow": {
+        "ProviderConfig": {
+            "Audience": "netbird",
+            "ClientID": "netbird",
+            "Scope": "openid profile email groups",
+            "RedirectURLs": ["http://localhost:53000"],
+            "UseIDToken": true
+        }
+    }
+}

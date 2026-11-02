@@ -16,3 +16,5 @@ env_files:
 ---
 name: netbird
 working_dir: netbird
+env_files:
+  - secrets.sops.env

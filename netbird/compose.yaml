@@ -1,13 +1,38 @@
 services:
-  netbird-server:
-    image: docker.io/netbirdio/netbird-server:0.82.0@sha256:7b5b53b2dc8bc25639f791cf72d47cf86911894ff3f8a97cb79bab9be958109c
+  netbird-management:
+    image: docker.io/netbirdio/management:0.82.0@sha256:07c8f979fcc980678cc64e584cf6b7b27204ceb4c871531b29e2dce39592e9ff
+    restart: unless-stopped
+
+    environment:
+      RELAY_AUTH_SECRET:
+      DATASTORE_ENCRYPTION_KEY:
+
+    volumes:
+      - ./management.json:/etc/netbird/management.json:ro
+      - management:/var/lib/netbird
+    networks:
+      - proxy
+
+  netbird-signal:
+    image: docker.io/netbirdio/signal:0.82.0@sha256:0c0c38bbef7dcdfa1822b6d59844615db55dc7303b664e7aed498151edc0dbfb
+    restart: unless-stopped
+
+    volumes:
+      - signal:/var/lib/netbird
+    networks:
+      - proxy
+
+  netbird-relay:
+    image: docker.io/netbirdio/relay:0.82.0@sha256:8f6b9e4193653ede89e83dd4aa4e2cf2562579b3e2481dcf259a7ab28bcd5fa1
     restart: unless-stopped
 
     ports:
       - 3478:3478/udp
-    volumes:
-      - ./config.yaml:/etc/netbird/config.yaml:ro
-      - data:/var/lib/netbird
+    environment:
+      NB_EXPOSED_ADDRESS: rels://netbird.danidev.vip:443
+      NB_ENABLE_STUN: "true"
+      NB_AUTH_SECRET: ${RELAY_AUTH_SECRET}
+
     networks:
       - proxy
 
@@ -18,19 +43,21 @@ services:
     environment:
       NETBIRD_MGMT_API_ENDPOINT: https://netbird.danidev.vip
       NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.danidev.vip
-      AUTH_AUTHORITY: https://netbird.danidev.vip/oauth2
-      AUTH_CLIENT_ID: netbird-dashboard
-      AUTH_AUDIENCE: netbird-dashboard
+      AUTH_AUTHORITY: https://auth.danidev.vip
+      AUTH_CLIENT_ID: netbird
+      AUTH_AUDIENCE: netbird
       AUTH_SUPPORTED_SCOPES: openid profile email groups
       AUTH_REDIRECT_URI: /nb-auth
       AUTH_SILENT_REDIRECT_URI: /nb-silent-auth
+      NETBIRD_TOKEN_SOURCE: idToken
       USE_AUTH0: "false"
 
     networks:
       - proxy
 
 volumes:
-  data:
+  management:
+  signal:
 
 networks:
   proxy:

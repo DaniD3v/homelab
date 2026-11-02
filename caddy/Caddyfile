@@ -3,11 +3,13 @@ auth.danidev.vip {
 }
 
 netbird.danidev.vip {
-	@grpc header Content-Type application/grpc*
-	reverse_proxy @grpc h2c://netbird-server:80
+	reverse_proxy /relay* netbird-relay:443
+	reverse_proxy /signalexchange.SignalExchange/* h2c://netbird-signal:80
+	reverse_proxy /ws-proxy/signal* netbird-signal:80
+	reverse_proxy /management.ManagementService/* h2c://netbird-management:80
 
-	@backend path /relay* /ws-proxy/* /api/* /oauth2/*
-	reverse_proxy @backend netbird-server:80
+	@management path /api/* /ws-proxy/management*
+	reverse_proxy @management netbird-management:80
 
 	reverse_proxy netbird-dashboard:80
 }
