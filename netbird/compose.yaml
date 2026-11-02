@@ -29,7 +29,7 @@ services:
     ports:
       - 3478:3478/udp
     environment:
-      NB_EXPOSED_ADDRESS: rels://netbird.danidev.vip:443
+      NB_EXPOSED_ADDRESS: rels://vpn.danidev.vip:443
       NB_ENABLE_STUN: "true"
       NB_AUTH_SECRET: ${RELAY_AUTH_SECRET}
 
@@ -41,8 +41,8 @@ services:
     restart: unless-stopped
 
     environment:
-      NETBIRD_MGMT_API_ENDPOINT: https://netbird.danidev.vip
-      NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.danidev.vip
+      NETBIRD_MGMT_API_ENDPOINT: https://vpn.danidev.vip
+      NETBIRD_MGMT_GRPC_API_ENDPOINT: https://vpn.danidev.vip
       AUTH_AUTHORITY: https://auth.danidev.vip
       AUTH_CLIENT_ID: netbird
       AUTH_AUDIENCE: netbird

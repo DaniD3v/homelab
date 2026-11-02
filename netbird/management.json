@@ -1,11 +1,11 @@
 {
-    "Stuns": [{ "Proto": "udp", "URI": "stun:netbird.danidev.vip:3478" }],
+    "Stuns": [{ "Proto": "udp", "URI": "stun:vpn.danidev.vip:3478" }],
     "Relay": {
-        "Addresses": ["rels://netbird.danidev.vip:443"],
+        "Addresses": ["rels://vpn.danidev.vip:443"],
         "CredentialsTTL": "24h",
         "Secret": "{{ .RELAY_AUTH_SECRET }}"
     },
-    "Signal": { "Proto": "https", "URI": "netbird.danidev.vip:443" },
+    "Signal": { "Proto": "https", "URI": "vpn.danidev.vip:443" },
     "DataStoreEncryptionKey": "{{ .DATASTORE_ENCRYPTION_KEY }}",
     "HttpConfig": {
         "AuthIssuer": "https://auth.danidev.vip",

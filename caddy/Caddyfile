@@ -2,7 +2,7 @@ auth.danidev.vip {
 	reverse_proxy pocket-id:1411
 }
 
-netbird.danidev.vip {
+vpn.danidev.vip {
 	reverse_proxy /relay* netbird-relay:443
 	reverse_proxy /signalexchange.SignalExchange/* h2c://netbird-signal:80
 	reverse_proxy /ws-proxy/signal* netbird-signal:80
