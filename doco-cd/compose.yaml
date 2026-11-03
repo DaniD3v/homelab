@@ -6,7 +6,7 @@ services:
     environment:
       SELF_UPDATE_ENABLED: "true"
       SOPS_AGE_KEY_FILE: /run/secrets/sops_age_key
-      POLL_CONFIG: "- url: https://github.com/DaniD3v/homelab.git"
+      POLL_CONFIG: "- {url: https://github.com/DaniD3v/homelab.git, interval: 60}"
 
     secrets:
       - sops_age_key
