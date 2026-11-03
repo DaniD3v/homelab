@@ -10,10 +10,21 @@ services:
       MONGO_URI: mongodb://mongodb:27017/LibreChat
       # Without Redis the scheduler stays off unless we assert there is only one api process.
       SCHEDULES_SINGLE_PROCESS: "true"
+      DOMAIN_CLIENT: https://clanker.danidev.vip
+      DOMAIN_SERVER: https://clanker.danidev.vip
+      ALLOW_SOCIAL_LOGIN: "true"
+      ALLOW_SOCIAL_REGISTRATION: "true"
+      OPENID_ISSUER: https://auth.danidev.vip
+      OPENID_CLIENT_ID: librechat
+      OPENID_USE_PKCE: "true"
+      OPENID_SCOPE: openid profile email offline_access
+      OPENID_CALLBACK_URL: /oauth/openid/callback
+      OPENID_REUSE_TOKENS: "true"
       CREDS_KEY:
       CREDS_IV:
       JWT_SECRET:
       JWT_REFRESH_SECRET:
+      OPENID_SESSION_SECRET:
 
     volumes:
       - uploads:/app/uploads

@@ -8,3 +8,10 @@ resource "pocketid_client" "netbird" {
     "http://localhost:53000",
   ]
 }
+
+resource "pocketid_client" "librechat" {
+  name          = "LibreChat"
+  client_id     = "librechat"
+  is_public     = true
+  callback_urls = ["https://clanker.danidev.vip/oauth/openid/callback"]
+}
