@@ -8,6 +8,7 @@
 - Images are pinned by tag and digest; data lives in named volumes.
 - Pocket ID objects that only exist in its database (the NetBird OIDC client) are managed by OpenTofu in `tofu/`, run from the laptop; state is gitignored and lives only there.
 - NetBird runs split (management, signal, relay) with Pocket ID as its external issuer, so no NetBird owner, PAT or Dex exists. Its IdP manager is `none`: Pocket ID API keys cannot be scoped, and NetBird does not need to read or manage Pocket ID users. The combined server cannot trust an external issuer; the split layout is upstream's secondary "advanced guide" path, accepted knowingly.
+- NetBird peers use `10.176.0.0/16`, a randomly picked private block, instead of the default CGNAT range `100.64.0.0/10`: Tailscale claims that range too and drops traffic from it that doesn't arrive on `tailscale0`, which broke NetBird's local DNS on the laptop. NetBird keeps the range, its random IPv6 ULA `/64` and DNS zones only in the management database (no config file or env), so they are set via the dashboard. VPN-only Caddy sites match both ranges literally; Caddy resolves matcher placeholders once at load and cannot read interface addresses.
 - Accounts stay manual: the Pocket ID admin via `/setup` before `auth` is forwarded publicly; the first Pocket ID user to sign in to NetBird becomes its owner, and later users are approved and promoted in the dashboard.
 
 ## Later
