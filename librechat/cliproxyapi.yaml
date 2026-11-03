@@ -1,0 +1,4 @@
+config-version: 8
+
+server:
+  port: 8317
