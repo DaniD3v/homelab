@@ -1,3 +1,13 @@
+{
+	servers {
+		timeouts {
+			# HACK: the 1m default cuts idle NetBird gRPC streams.
+			# Scope to those routes once caddyserver/caddy#8121 is released.
+			read_body_idle -1s
+		}
+	}
+}
+
 auth.danidev.vip {
 	reverse_proxy pocket-id:1411
 }
