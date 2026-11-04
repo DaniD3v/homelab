@@ -9,7 +9,7 @@
 }
 
 (vpn-only) {
-	@public not remote_ip 100.64.0.0/10 fd25:2656:b652:7123::/64
+	@public not remote_ip 10.176.0.0/16 fd25:2656:b652:7123::/64
 	respond @public 403
 }
 
