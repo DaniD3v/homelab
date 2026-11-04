@@ -11,6 +11,7 @@
 - NetBird peers use `10.176.0.0/16`, a randomly picked private block, instead of the default CGNAT range `100.64.0.0/10`: Tailscale claims that range too and drops traffic from it that doesn't arrive on `tailscale0`, which broke NetBird's local DNS on the laptop. NetBird keeps the range, its random IPv6 ULA `/64` and DNS zones only in the management database (no config file or env), so they are set via the dashboard. VPN-only Caddy sites match the IPv4 range and the ULA literally; Caddy resolves matcher placeholders once at load and cannot read interface addresses.
 - Accounts stay manual: the Pocket ID admin via `/setup` before `auth` is forwarded publicly; the first Pocket ID user to sign in to NetBird becomes its owner, and later users are approved and promoted in the dashboard.
 - LibreChat uses the ChatGPT subscription through CLIProxyAPI on the Codex backend route (`chatgpt.com/backend-api/codex`, Codex CLI OAuth), the route established proxies use; the ToS gray area is accepted knowingly. Official Sign in with ChatGPT can be bound later (`-siwc-bind`). The proxy has no client API key: it publishes no port and only shares the librechat stack network. Its Codex credential lives only in the `cliproxyapi` volume, created once with `-codex-device-login`.
+- LibreChat has no trace backend. Langfuse needs ClickHouse, Redis and S3; Peri-Fuse (a single-container Langfuse derivative) is too immature (one maintainer, no releases); generic OTLP backends cannot read Langfuse's `langfuse.*` span attributes.
 
 ## Later
 
