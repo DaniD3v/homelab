@@ -1,5 +1,12 @@
 version: 1.3.17
 
+interface:
+  prompts:
+    use: false
+  schedules:
+    use: true
+    create: true
+
 endpoints:
   custom:
     - name: CLIProxyAPI
