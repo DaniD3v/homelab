@@ -15,3 +15,5 @@ endpoints:
       models:
         default: [gpt-6.1-sol]
         fetch: true
+      addParams:
+        web_search: true
