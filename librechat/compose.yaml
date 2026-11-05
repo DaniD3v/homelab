@@ -1,6 +1,7 @@
 services:
   api:
-    image: registry.librechat.ai/librechat-ai/librechat:v0.8.8@sha256:5b706bcee1ca154a1e2987303aaeca0eb27f97919cccee4bb604226c2f8abf61
+    # fork with native scheduling tools
+    image: ghcr.io/danid3v-slop/librechat-dev:fe7f8456f543b976389eb23bc56b4bf03577ff70@sha256:2ad348b509c7064adc0566c31f2f7884f0af368499a84ac2b88cb38d3178dc25
     restart: unless-stopped
 
     depends_on:
