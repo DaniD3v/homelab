@@ -6,6 +6,11 @@ working_dir: librechat
 env_files:
   - secrets.sops.env
 ---
+name: obot
+working_dir: obot
+env_files:
+  - secrets.sops.env
+---
 name: caddy
 working_dir: caddy
 env_files:

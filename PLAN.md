@@ -2,7 +2,9 @@
 
 ## Decisions
 
+- Work in this repo uses lockstep.
 - doco-cd runs self-managed on the main host (Debian 13 under Incus, distro Docker 26) and polls `https://github.com/DaniD3v/homelab.git`. Forgejo is skipped for now.
+- The host's eight HDDs form a raidz2 ZFS pool `data` (replacing mdadm RAID6); the Incus pool `data` on it holds all VM roots, with Incus snapshots daily at 04:00 kept 7 days. The NVMe holds only NixOS.
 - The laptop (rootless Podman) has no target; stacks are tested there manually with plain compose.
 - Minimal config: copy only needed upstream parts, no restated defaults, `.yaml` extensions.
 - Images are pinned by tag and digest; data lives in named volumes.
@@ -12,10 +14,22 @@
 - Accounts stay manual: the Pocket ID admin via `/setup` before `auth` is forwarded publicly; the first Pocket ID user to sign in to NetBird becomes its owner, and later users are approved and promoted in the dashboard.
 - LibreChat uses the ChatGPT subscription through CLIProxyAPI on the Codex backend route (`chatgpt.com/backend-api/codex`, Codex CLI OAuth), the route established proxies use; the ToS gray area is accepted knowingly. Official Sign in with ChatGPT can be bound later (`-siwc-bind`). The proxy has no client API key: it publishes no port and only shares the librechat stack network. Its Codex credential lives only in the `cliproxyapi` volume, created once with `-codex-device-login`.
 - LibreChat has no trace backend. Langfuse needs ClickHouse, Redis and S3; Peri-Fuse (a single-container Langfuse derivative) is too immature (one maintainer, no releases); generic OTLP backends cannot read Langfuse's `langfuse.*` span attributes.
+- LibreChat gets Obot now; my own MCP tool comes later. Obot's Docker should be sandboxed and deployed through doco-cd; a separate Incus VM is only an acceptable fallback, because it moves state outside doco-cd. MCP servers need internet and images kept on disk across redeploys, and must never reach Caddy (nor other private addresses).
+- Obot runs at `mcp.danidev.vip` (VPN-only) with local accounts. Its Docker is rootless dind (`docker:dind-rootless`) on the stack's own network. Obot runs from the fork `DaniD3v-Slop/obot` (branch `homelab`, image `ghcr.io/danid3v-slop/obot`), which adds `OBOT_SERVER_MCPDOCKER_HOST`/`OBOT_SERVER_MCPDOCKER_PUBLISH_ADDRESS` so Obot, as its own container on the stack network and `proxy`, reaches MCP ports published on `docker`. No egress filter beyond that: MCP containers may reach Obot (it authenticates) and anything the internet can; Obot's embedded Postgres gets a secret password instead of the image default `obot`. MCP containers cannot reach the `proxy` network; via the host's addresses they are just non-VPN clients that VPN-only sites refuse. Rejected: Sysbox (a host install that rewrites `daemon.json` network pools), gVisor (no rootless Docker inside; rootful only with images in tmpfs).
+- LibreChat agents will later start their own MCP servers through my own tool, an agent-facing MCP front that fixes the sandbox by policy (the agent picks the package and allowed hosts, never isolation, mounts or secrets). Rejected: MCPProxy (the agent can override per-server isolation), Docker MCP Gateway (slots shared by all users, agent config lost on restart, npm and PyPI only), ToolHive (no agent-facing MCP since v0.30.1), k3s with the ToolHive operator inside gVisor or libkrun (k3s networking needs xtables, ipset and VXLAN, which gVisor and libkrunfw's kernel lack), Kata Containers (Docker support only through its deprecated Go runtime with QEMU), RunCVM (one maintainer, QEMU runs seccomp-unconfined on the host), krun on the main host (Debian 13's crun is built without libkrun; forky's libkrun does not build yet), 1MCP and Magg (servers as plain child processes), Wassette (Wasm components only).
 
 ## Later
 
+- **Big TODO: Obot login through Pocket ID.** Obot has no generic OIDC provider; add one in a fork (custom auth provider and image), then switch Obot from local accounts to Pocket ID. Switching makes the signing-in account the new owner; local accounts do not carry over.
+- Upstream the Obot fork's MCP Docker host/publish address settings: rebase the `feat:` commit onto upstream main and open a PR (only with explicit OK).
+- LibreChat → Obot: decide how LibreChat reaches `mcp.danidev.vip` (its container IP is not in the VPN range, so the VPN-only rule refuses it) and per-user OAuth vs a shared API key.
+- Obot stores credentials unencrypted by default; configure an encryption provider.
 - Staging: a host or branch that deploys before main, promoted by merge.
+- Off-site backups of the VMs: pick the target and tool (e.g. restic, `zfs send`) and whether they run in the guest or on the host. Until then only the local Incus snapshots exist.
+- Root redundancy once a second NVMe is bought: mirror the host's root across both NVMes (design then; ESPs on the raidz2 HDDs were rejected).
+- Host: `boot.tmp.cleanOnBoot = true`, so stale `/tmp` build results (`nh os` left 8 old system closures pinned) cannot pile up.
+- All hosts: `nix.gc.options = "--delete-older-than 14d"` in the shared nix module; the automatic GC never deletes old generations today.
+- Upstream fix: the docker-library `docker:dind` entrypoint probes iptables (`iptables --version` under `set -e`) even when dockerd gets `--iptables=false`, so it fails where nft iptables cannot run (gVisor); it should skip the probe then.
 - Upstream fix: netbirdio/dashboard defaults `AUTH_REDIRECT_URI`/`AUTH_SILENT_REDIRECT_URI` to `/#callback`/`/#silent-callback` (`src/utils/config.ts`); OAuth2 forbids fragments, so every deployment overrides them with `/nb-auth`/`/nb-silent-auth`.
 - Upstream fix: the netbirdio/dashboard image answers its own OAuth callback routes `/nb-auth`/`/nb-silent-auth` with HTTP 404 (nginx `try_files … =404` serves `404.html`); they should serve them with 200.
 - Make every random secret easy to regenerate (e.g. one Just recipe that re-creates a secret file blindly). Data-encryption keys (Pocket ID `ENCRYPTION_KEY`, NetBird `store.encryptionKey`) are excluded: changing one makes existing data undecryptable (Pocket ID fails to start).

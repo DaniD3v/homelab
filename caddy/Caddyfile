@@ -33,3 +33,8 @@ clanker.danidev.vip {
 	import vpn-only
 	reverse_proxy librechat-api-1:3080
 }
+
+mcp.danidev.vip {
+	import vpn-only
+	reverse_proxy obot:8080
+}

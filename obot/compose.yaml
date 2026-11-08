@@ -1,0 +1,44 @@
+services:
+  docker:
+    image: docker.io/library/docker:29.10.0-dind-rootless@sha256:5a703ad0d72cd5e4fb4beca8024d6eddef6d22a46ed1d9812bf3d24ff43ccbce
+    restart: unless-stopped
+
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
+      - systempaths=unconfined
+    devices:
+      - /dev/net/tun
+    volumes:
+      - docker:/home/rootless/.local/share/docker
+      - docker-socket:/run/user
+
+  obot:
+    # fork with a configurable MCP Docker host
+    image: ghcr.io/danid3v-slop/obot:sha-df88f11adb169b5a452a1f21af560197cc8739bb@sha256:fd9e79f318e2cdccae7614152a479c369048e418a2bff282cdd4eb7dbe3b3d3b
+    restart: unless-stopped
+
+    depends_on:
+      - docker
+    environment:
+      DOCKER_HOST: unix:///run/docker/1000/docker.sock
+      OBOT_SERVER_HOSTNAME: https://mcp.danidev.vip
+      OBOT_SERVER_ENABLE_AUTHENTICATION: "true"
+      OBOT_SERVER_MCPDOCKER_HOST: docker
+      OBOT_SERVER_MCPDOCKER_PUBLISH_ADDRESS: 0.0.0.0
+      POSTGRES_PASSWORD:
+    volumes:
+      - data:/data
+      - docker-socket:/run/docker
+    networks:
+      - default
+      - proxy
+
+volumes:
+  data:
+  docker:
+  docker-socket:
+
+networks:
+  proxy:
+    external: true
