@@ -1,7 +1,7 @@
 services:
   api:
     # fork with native scheduling tools
-    image: ghcr.io/danid3v-slop/librechat-dev:32a8ec61609f13fc3599f59d90956cf7e0e252cc@sha256:3709719b7fb8ad2e454449a6ea69fd683d3ec1cb56c0e84f3fe59e6f0a0b1975
+    image: ghcr.io/danid3v-slop/librechat-dev:b52f792be912f634339126fd78c2651c0e848e08@sha256:7772ac657b8ee0a23215b8cf87d6c261dfd8b09286797e41c39fb2c7bb1eb2e0
     restart: unless-stopped
 
     depends_on:

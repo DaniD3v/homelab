@@ -1,4 +1,4 @@
-version: 1.3.17
+version: 1.3.19
 
 interface:
   prompts:
@@ -17,3 +17,7 @@ endpoints:
         fetch: true
       addParams:
         web_search: true
+
+# temporary: keep stored credentials readable by the previous image until the upgrade is accepted
+credentials:
+  writeFormat: legacy
