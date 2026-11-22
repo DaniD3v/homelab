@@ -17,7 +17,3 @@ endpoints:
         fetch: true
       addParams:
         web_search: true
-
-# temporary: keep stored credentials readable by the previous image until the upgrade is accepted
-credentials:
-  writeFormat: legacy
