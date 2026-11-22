@@ -20,3 +20,12 @@ resource "pocketid_group" "librechat_admin" {
   name          = "librechat-admin"
   friendly_name = "LibreChat admins"
 }
+
+# Agents sign in as this user to test LibreChat. See .agents/skills/librechat-agent-login.
+resource "pocketid_user" "clanker" {
+  username     = "clanker"
+  email        = "clanker@example.com"
+  first_name   = "Clanker"
+  last_name    = ""
+  display_name = "Clanker"
+}
