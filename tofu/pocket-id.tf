@@ -16,6 +16,19 @@ resource "pocketid_client" "librechat" {
   callback_urls = ["https://clanker.danidev.vip/oauth/openid/callback"]
 }
 
+# Obot's OIDC auth provider sends users back to the root, which forwards to /oauth2/callback.
+resource "pocketid_client" "obot" {
+  name          = "Obot"
+  client_id     = "obot"
+  is_public     = false
+  callback_urls = ["https://mcp.danidev.vip/"]
+}
+
+output "obot_client_secret" {
+  value     = pocketid_client.obot.client_secret
+  sensitive = true
+}
+
 resource "pocketid_group" "librechat_admin" {
   name          = "librechat-admin"
   friendly_name = "LibreChat admins"
