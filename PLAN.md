@@ -5,6 +5,7 @@
 - Work in this repo uses lockstep.
 - doco-cd runs self-managed on the main host (Debian 13 under Incus, distro Docker 26) and polls `https://github.com/DaniD3v/homelab.git`. Forgejo is skipped for now.
 - The host's eight HDDs form a raidz2 ZFS pool `data` (replacing mdadm RAID6); the Incus pool `data` on it holds all VM roots, with Incus snapshots daily at 04:00 kept 7 days. The NVMe holds only NixOS.
+- The main host's VM keeps the fixed address `10.30.0.11` (OpenWrt's port forwards point there) through its Incus `cloud-init.network-config`, not a DHCP lease; a recreated VM gets a new MAC, so a lease would not follow it.
 - The laptop (rootless Podman) has no target; stacks are tested there manually with plain compose.
 - Minimal config: copy only needed upstream parts, no restated defaults, `.yaml` extensions.
 - Images are pinned by tag and digest; data lives in named volumes.
