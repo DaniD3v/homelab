@@ -14,8 +14,8 @@ services:
       - docker-socket:/run/user
 
   obot:
-    # fork with a configurable MCP Docker host
-    image: ghcr.io/danid3v-slop/obot:sha-df88f11adb169b5a452a1f21af560197cc8739bb@sha256:fd9e79f318e2cdccae7614152a479c369048e418a2bff282cdd4eb7dbe3b3d3b
+    # fork with a configurable MCP Docker host, a generic OIDC auth provider and no sales prompts
+    image: ghcr.io/danid3v-slop/obot:sha-48f088584f3626d80ba6e083f58febef0c8b6a4c@sha256:b9961bdb55329b4c99281106b23e8734573ec24f44b48bbffde92ca2a7320cd2
     restart: unless-stopped
 
     depends_on:
