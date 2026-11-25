@@ -15,7 +15,7 @@ services:
 
   obot:
     # fork with a configurable MCP Docker host, a generic OIDC auth provider and no sales prompts
-    image: ghcr.io/danid3v-slop/obot:sha-48f088584f3626d80ba6e083f58febef0c8b6a4c@sha256:b9961bdb55329b4c99281106b23e8734573ec24f44b48bbffde92ca2a7320cd2
+    image: ghcr.io/danid3v-slop/obot:sha-1ce0c5dbbc053fd60cc08b738f465b40e3346f77@sha256:6f6e47d19a276f2ef55a49924105c1e6814dcb196413e2806a66e781206fad3b
     restart: unless-stopped
 
     depends_on:
